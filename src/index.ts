@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
+// import cors from "cors";
 import { Request, Response } from "express";
 
 import { AppDataSource } from "./data-source";
@@ -12,6 +13,12 @@ dotenv.config();
 const { PORT = 3000 } = process.env;
 
 const app = express();
+app.use("/", (req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Headers", "*");
+  res.set("Access-Control-Allow-Methods", "*");
+  next()
+});
 app.use(express.json());
 app.use(errorHandler);
 app.use("/users", userRouter);
