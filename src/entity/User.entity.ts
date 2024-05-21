@@ -12,10 +12,10 @@ export class User {
   id: string;
 
   @Column({ nullable: false, name: "first_name" })
-  firstName: string;
+  first_name: string;
 
   @Column({ nullable: false, name: "last_name" })
-  lastName: string;
+  last_name: string;
 
   @Column({ nullable: false })
   email: string;

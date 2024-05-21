@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User.entity";
-import * as cache from "memory-cache";
 
 export class UserController {
   static async createUser(req: Request, res: Response) {
     const { first_name, last_name, email, gender } = req.body;
     const user = new User();
-    user.firstName = first_name;
-    user.lastName = last_name;
+    user.first_name = first_name;
+    user.last_name = last_name;
     user.email = email;
     user.gender = gender;
 
@@ -19,22 +18,13 @@ export class UserController {
   }
 
   static async getUsers(req: Request, res: Response) {
-    const data = cache.get("data");
-    if (data) {
-      return res.status(200).json({
-        error: false,
-        users: data,
-      });
-    } else {
-      const userRepository = AppDataSource.getRepository(User);
-      const users = await userRepository.find();
+    const userRepository = AppDataSource.getRepository(User);
+    const users = await userRepository.find();
 
-      cache.put("data", users, 6000);
-      return res.status(200).json({
-        error: false,
-        users: users,
-      });
-    }
+    return res.status(200).json({
+      error: false,
+      users: users,
+    });
   }
 
   static async updateUser(req: Request, res: Response) {
@@ -44,8 +34,8 @@ export class UserController {
     const user = await userRepository.findOne({
       where: { id },
     });
-    user.firstName = first_name;
-    user.lastName = last_name;
+    user.first_name = first_name;
+    user.last_name = last_name;
     user.email = email;
     user.gender = gender;
 
